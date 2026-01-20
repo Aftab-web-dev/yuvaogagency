@@ -13,9 +13,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const baseStyles = 'inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-300 focus-ring disabled:opacity-50 disabled:cursor-not-allowed'
 
     const variants = {
-      primary: 'bg-accent hover:bg-accent-hover text-white shadow-lg shadow-accent/25 hover:shadow-accent/40 hover:-translate-y-0.5',
+      primary: 'bg-accent hover:bg-accent-hover text-black shadow-lg shadow-accent/25 hover:shadow-accent/40 hover:-translate-y-0.5',
       secondary: 'bg-[var(--card-bg)] hover:bg-[var(--card-bg)] text-[var(--foreground)] border border-[var(--border)] hover:border-accent',
-      outline: 'bg-transparent border-2 border-accent text-accent hover:bg-accent hover:text-white',
+      outline: 'bg-transparent border-2 border-accent text-accent hover:bg-accent hover:text-black',
       ghost: 'bg-transparent hover:bg-[var(--card-bg)] text-[var(--foreground-muted)] hover:text-[var(--foreground)]',
     }
 

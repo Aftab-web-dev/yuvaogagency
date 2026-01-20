@@ -525,7 +525,7 @@ export default function Home() {
 
               <div className="relative z-10">
                 <motion.h2
-                  className="heading-lg text-white mb-6"
+                  className="heading-lg text-black mb-6"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -534,7 +534,7 @@ export default function Home() {
                   Let's work together
                 </motion.h2>
                 <motion.p
-                  className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-8"
+                  className="text-black/70 text-lg md:text-xl max-w-2xl mx-auto mb-8"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -551,7 +551,7 @@ export default function Home() {
                 >
                   <Button
                     size="lg"
-                    className="bg-white text-accent hover:bg-white/90 shadow-xl"
+                    className="bg-black text-white hover:bg-black/80 shadow-xl"
                     asChild
                   >
                     <Link to="/contact">

@@ -139,8 +139,8 @@ export function CustomCursor() {
           <div
             className="w-full h-full rounded-full border-2 transition-colors duration-200"
             style={{
-              borderColor: isHovering ? '#FF5722' : 'rgba(255, 87, 34, 0.6)',
-              backgroundColor: isHovering ? 'rgba(255, 87, 34, 0.1)' : 'transparent',
+              borderColor: isHovering ? '#faff01' : 'rgba(250, 255, 1, 0.6)',
+              backgroundColor: isHovering ? 'rgba(250, 255, 1, 0.1)' : 'transparent',
             }}
           />
         </motion.div>

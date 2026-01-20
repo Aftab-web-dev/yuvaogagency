@@ -1,6 +1,7 @@
 import { useParams, Link, Navigate } from 'react-router-dom'
-import { Calendar, Clock, ArrowLeft, Twitter, Linkedin, Facebook } from 'lucide-react'
-import { Container, Card, Badge } from '@/components/ui'
+import { motion } from 'framer-motion'
+import { Calendar, Clock, ArrowLeft, Twitter, Linkedin, Facebook, Share2 } from 'lucide-react'
+import { Container, Badge } from '@/components/ui'
 import { SEO, AnimatedSection } from '@/components/shared'
 import { getBlogPostBySlug, blogPosts } from '@/data/blog'
 import { formatDate } from '@/lib/utils'
@@ -32,31 +33,42 @@ export default function BlogPost() {
       />
 
       {/* Hero */}
-      <section className="section-padding bg-gradient-to-b from-dark-900 to-dark-950">
-        <Container size="md">
+      <section className="relative pt-32 pb-16 overflow-hidden">
+        {/* Background elements */}
+        <div className="absolute inset-0">
+          <motion.div
+            className="absolute top-20 right-20 w-96 h-96 rounded-full bg-accent/10 blur-3xl"
+            animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </div>
+
+        <Container size="md" className="relative">
           <AnimatedSection>
             <Link
               to="/blog"
-              className="inline-flex items-center gap-2 text-dark-400 hover:text-white transition-colors mb-8"
+              className="inline-flex items-center gap-2 text-white/50 hover:text-accent transition-colors mb-8 group"
             >
-              <ArrowLeft className="w-4 h-4" />
+              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
               Back to Blog
             </Link>
 
-            <Badge variant="primary" className="mb-4">
+            <Badge className="mb-4 bg-accent/10 text-accent border-accent/20">
               {post.category}
             </Badge>
 
-            <h1 className="heading-xl mb-6">{post.title}</h1>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+              {post.title}
+            </h1>
 
-            <div className="flex flex-wrap items-center gap-6 text-dark-400">
+            <div className="flex flex-wrap items-center gap-6 text-white/50">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center">
-                  <span className="text-primary-400 font-semibold">
+                <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center">
+                  <span className="text-accent font-semibold">
                     {post.author.charAt(0)}
                   </span>
                 </div>
-                <span>{post.author}</span>
+                <span className="text-white/70">{post.author}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
@@ -72,30 +84,30 @@ export default function BlogPost() {
       </section>
 
       {/* Content */}
-      <section className="section-padding">
+      <section className="pb-20">
         <Container size="md">
           <AnimatedSection>
             <div className="prose prose-invert prose-lg max-w-none">
               {/* Featured Image Placeholder */}
-              <div className="aspect-video bg-dark-800 rounded-xl mb-8 flex items-center justify-center">
-                <span className="text-9xl font-bold text-dark-700">
+              <div className="aspect-video bg-[#1a1a1a] rounded-2xl mb-10 flex items-center justify-center border border-white/10">
+                <span className="text-9xl font-bold text-white/10">
                   {post.title.charAt(0)}
                 </span>
               </div>
 
               {/* Article Content */}
-              <div className="text-dark-300 leading-relaxed space-y-6">
+              <div className="text-white/70 leading-relaxed space-y-6">
                 {post.content.split('\n\n').map((paragraph, index) => {
                   if (paragraph.startsWith('# ')) {
                     return (
-                      <h1 key={index} className="text-3xl font-bold text-white mt-8 mb-4">
+                      <h1 key={index} className="text-3xl font-bold text-white mt-10 mb-4">
                         {paragraph.replace('# ', '')}
                       </h1>
                     )
                   }
                   if (paragraph.startsWith('## ')) {
                     return (
-                      <h2 key={index} className="text-2xl font-bold text-white mt-8 mb-4">
+                      <h2 key={index} className="text-2xl font-bold text-white mt-10 mb-4">
                         {paragraph.replace('## ', '')}
                       </h2>
                     )
@@ -108,27 +120,45 @@ export default function BlogPost() {
               </div>
 
               {/* Tags */}
-              <div className="flex flex-wrap gap-2 mt-8 pt-8 border-t border-dark-700">
+              <div className="flex flex-wrap gap-2 mt-10 pt-10 border-t border-white/10">
                 {post.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary">
+                  <span
+                    key={tag}
+                    className="px-4 py-2 rounded-full bg-white/5 text-white/60 text-sm border border-white/10"
+                  >
                     {tag}
-                  </Badge>
+                  </span>
                 ))}
               </div>
 
               {/* Share */}
-              <div className="flex items-center justify-between mt-8 pt-8 border-t border-dark-700">
-                <span className="text-dark-400">Share this article:</span>
+              <div className="flex items-center justify-between mt-10 pt-10 border-t border-white/10">
+                <div className="flex items-center gap-2 text-white/50">
+                  <Share2 className="w-5 h-5" />
+                  <span>Share this article:</span>
+                </div>
                 <div className="flex gap-3">
-                  <button className="w-10 h-10 rounded-lg bg-dark-700 flex items-center justify-center text-dark-400 hover:text-white hover:bg-dark-600 transition-all">
+                  <motion.button
+                    className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-accent hover:border-accent/30 transition-all"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
                     <Twitter className="w-5 h-5" />
-                  </button>
-                  <button className="w-10 h-10 rounded-lg bg-dark-700 flex items-center justify-center text-dark-400 hover:text-white hover:bg-dark-600 transition-all">
+                  </motion.button>
+                  <motion.button
+                    className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-accent hover:border-accent/30 transition-all"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
                     <Linkedin className="w-5 h-5" />
-                  </button>
-                  <button className="w-10 h-10 rounded-lg bg-dark-700 flex items-center justify-center text-dark-400 hover:text-white hover:bg-dark-600 transition-all">
+                  </motion.button>
+                  <motion.button
+                    className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-accent hover:border-accent/30 transition-all"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
                     <Facebook className="w-5 h-5" />
-                  </button>
+                  </motion.button>
                 </div>
               </div>
             </div>
@@ -138,27 +168,36 @@ export default function BlogPost() {
 
       {/* Related Posts */}
       {relatedPosts.length > 0 && (
-        <section className="section-padding bg-dark-900/50">
+        <section className="py-20 bg-white/[0.02]">
           <Container>
             <AnimatedSection className="text-center mb-12">
-              <h2 className="heading-md">Related Articles</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-white">Related Articles</h2>
             </AnimatedSection>
 
             <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {relatedPosts.map((relatedPost, index) => (
-                <AnimatedSection key={relatedPost.id} delay={index * 0.1}>
+                <motion.div
+                  key={relatedPost.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                >
                   <Link to={`/blog/${relatedPost.slug}`}>
-                    <Card hover className="h-full">
-                      <Badge size="sm" className="mb-3">
+                    <motion.div
+                      className="h-full p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-accent/30 transition-all group"
+                      whileHover={{ y: -5 }}
+                    >
+                      <Badge className="mb-3 bg-white/5 text-white/60 border-white/10">
                         {relatedPost.category}
                       </Badge>
-                      <h3 className="text-lg font-semibold text-white mb-2">
+                      <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-accent transition-colors">
                         {relatedPost.title}
                       </h3>
-                      <p className="text-dark-400 text-sm">{relatedPost.excerpt}</p>
-                    </Card>
+                      <p className="text-white/60 text-sm">{relatedPost.excerpt}</p>
+                    </motion.div>
                   </Link>
-                </AnimatedSection>
+                </motion.div>
               ))}
             </div>
           </Container>

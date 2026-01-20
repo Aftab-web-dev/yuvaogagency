@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Menu, X, ChevronDown, ArrowRight } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { Container, Button } from '@/components/ui'
-import { ThemeToggle } from '@/components/shared/ThemeToggle'
 import { navigation } from '@/data/siteConfig'
 
 export function Header() {
@@ -15,10 +13,10 @@ export function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
+      setIsScrolled(window.scrollY > 20)
     }
     window.addEventListener('scroll', handleScroll)
-    handleScroll() // Check initial state
+    handleScroll()
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -27,106 +25,48 @@ export function Header() {
     setOpenDropdown(null)
   }, [location.pathname])
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isMobileMenuOpen])
+
   return (
-    <motion.header
-      className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-colors duration-300',
-        isScrolled
-          ? 'bg-[#0D0D0D]/95 dark:bg-[#0D0D0D]/95 light:bg-white/95 backdrop-blur-xl border-b border-white/10 dark:border-white/10 light:border-black/10 shadow-lg'
-          : 'bg-transparent border-b border-transparent'
-      )}
-      initial={{ height: 90 }}
-      animate={{ height: isScrolled ? 70 : 90 }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
-    >
-      <Container className="h-full">
-        <nav className="flex items-center justify-between h-full">
-          {/* Left Navigation */}
-          <div className="hidden lg:flex items-center gap-1">
-            {navigation.slice(0, Math.ceil(navigation.length / 2)).map((item) => (
-              <NavItem
-                key={item.label}
-                item={item}
-                openDropdown={openDropdown}
-                setOpenDropdown={setOpenDropdown}
-                location={location}
+    <>
+      {/* Main Header */}
+      <header
+        className={cn(
+          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+          isScrolled
+            ? 'py-3 bg-[#0D0D0D]/95 backdrop-blur-xl border-b border-white/10'
+            : 'py-4 bg-transparent'
+        )}
+      >
+        <Container>
+          <nav className="flex items-center justify-between">
+            {/* Logo */}
+            <Link to="/" className="relative z-10">
+              <img
+                src="/assets/yoglogo.png"
+                alt="YUVA OG"
+                className={cn(
+                  'w-auto transition-all duration-300',
+                  isScrolled ? 'h-16' : 'h-20'
+                )}
               />
-            ))}
-          </div>
+            </Link>
 
-          {/* Center Logo */}
-          <Link
-            to="/"
-            className="flex items-center group relative"
-          >
-            <motion.div
-              className="relative"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ duration: 0.2 }}
-            >
-              <span
-                className="text-2xl lg:text-3xl font-bold tracking-tight text-white dark:text-white transition-colors duration-300 group-hover:text-accent"
-                style={{ fontFamily: 'Montserrat, sans-serif' }}
-              >
-                YUVA<span className="text-accent">OG</span>
-              </span>
-            </motion.div>
-          </Link>
-
-          {/* Right Navigation */}
-          <div className="hidden lg:flex items-center gap-1">
-            {navigation.slice(Math.ceil(navigation.length / 2)).map((item) => (
-              <NavItem
-                key={item.label}
-                item={item}
-                openDropdown={openDropdown}
-                setOpenDropdown={setOpenDropdown}
-                location={location}
-              />
-            ))}
-
-            {/* Theme Toggle */}
-            <ThemeToggle className="ml-2" />
-
-            {/* CTA Button */}
-            <Button asChild className="ml-4 group">
-              <Link to="/contact">
-                Start a project
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </Button>
-          </div>
-
-          {/* Mobile: Theme Toggle & Menu Button */}
-          <div className="flex lg:hidden items-center gap-2">
-            <ThemeToggle />
-            <motion.button
-              className="p-2.5 rounded-full bg-white/10 dark:bg-white/10 border border-white/20 dark:border-white/20 text-white dark:text-white hover:bg-white/20 hover:border-accent transition-all"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle menu"
-              whileTap={{ scale: 0.95 }}
-            >
-              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </motion.button>
-          </div>
-        </nav>
-      </Container>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="lg:hidden bg-[#0D0D0D] dark:bg-[#0D0D0D] border-t border-white/10"
-          >
-            <Container className="py-6">
-              <div className="flex flex-col gap-2">
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center">
+              <div className="flex items-center bg-white/5 backdrop-blur-sm rounded-full px-2 py-1.5 border border-white/10">
                 {navigation.map((item) => (
-                  <MobileNavItem
+                  <NavItem
                     key={item.label}
                     item={item}
                     openDropdown={openDropdown}
@@ -134,20 +74,82 @@ export function Header() {
                     location={location}
                   />
                 ))}
-                <div className="pt-4 mt-2 border-t border-white/10">
-                  <Button className="w-full" asChild>
-                    <Link to="/contact">
-                      Start a project
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </Button>
-                </div>
               </div>
-            </Container>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.header>
+            </div>
+
+            {/* Desktop CTA Button */}
+            <div className="hidden lg:block">
+              <Button asChild size="sm" className="group">
+                <Link to="/contact">
+                  Let's Talk
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="lg:hidden w-12 h-12 flex items-center justify-center rounded-xl bg-accent text-black"
+              onClick={() => setIsMobileMenuOpen(true)}
+              aria-label="Open menu"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+          </nav>
+        </Container>
+      </header>
+
+      {/* Mobile Menu Overlay - Completely separate from header */}
+      {isMobileMenuOpen && (
+        <div
+          className="lg:hidden fixed inset-0 z-[99999]"
+          style={{ backgroundColor: '#0D0D0D' }}
+        >
+          {/* Mobile Header */}
+          <div className="flex items-center justify-between px-4 py-4 border-b border-white/10">
+            <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
+              <img
+                src="/assets/yoglogo.png"
+                alt="YUVA OG"
+                className="h-10 w-auto"
+              />
+            </Link>
+            <button
+              className="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 text-white"
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-label="Close menu"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+
+          {/* Mobile Navigation */}
+          <div className="px-4 py-6 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 80px)' }}>
+            <nav className="space-y-2">
+              {navigation.map((item) => (
+                <MobileNavItem
+                  key={item.label}
+                  item={item}
+                  openDropdown={openDropdown}
+                  setOpenDropdown={setOpenDropdown}
+                  location={location}
+                  closeMenu={() => setIsMobileMenuOpen(false)}
+                />
+              ))}
+            </nav>
+
+            <div className="mt-8 pt-6 border-t border-white/10">
+              <Button className="w-full" size="lg" asChild>
+                <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)}>
+                  Let's Talk
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 
@@ -173,15 +175,15 @@ function NavItem({ item, openDropdown, setOpenDropdown, location }: NavItemProps
       {item.children ? (
         <button
           className={cn(
-            'flex items-center gap-1 px-4 py-2 rounded-full text-white/70 hover:text-white transition-all duration-300 text-sm font-medium',
-            isActive && 'text-accent'
+            'flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors',
+            isActive ? 'text-accent' : 'text-white/70 hover:text-white'
           )}
           onMouseEnter={() => setOpenDropdown(item.label)}
           onMouseLeave={() => setOpenDropdown(null)}
         >
           {item.label}
           <ChevronDown className={cn(
-            'w-4 h-4 transition-transform duration-300',
+            'w-3.5 h-3.5 transition-transform duration-200',
             openDropdown === item.label && 'rotate-180'
           )} />
         </button>
@@ -189,8 +191,8 @@ function NavItem({ item, openDropdown, setOpenDropdown, location }: NavItemProps
         <Link
           to={item.href}
           className={cn(
-            'px-4 py-2 rounded-full text-white/70 hover:text-white transition-all duration-300 block text-sm font-medium',
-            isActive && 'text-accent'
+            'relative px-4 py-2 text-sm font-medium transition-colors block',
+            isActive ? 'text-accent' : 'text-white/70 hover:text-white'
           )}
         >
           {item.label}
@@ -200,32 +202,26 @@ function NavItem({ item, openDropdown, setOpenDropdown, location }: NavItemProps
       {/* Dropdown */}
       {item.children && (
         <div
-          className={cn(
-            'absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 translate-y-2 z-50'
-          )}
+          className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
           onMouseEnter={() => setOpenDropdown(item.label)}
           onMouseLeave={() => setOpenDropdown(null)}
         >
-          <motion.div
-            className="p-2 min-w-[220px] rounded-2xl bg-[#1a1a1a] border border-white/10 shadow-2xl"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            {item.children.map((child, index) => (
+          <div className="p-2 min-w-[200px] rounded-xl bg-[#141414] border border-white/10 shadow-xl">
+            {item.children.map((child) => (
               <Link
                 key={child.label}
                 to={child.href}
                 className={cn(
-                  'block px-4 py-3 rounded-xl text-white/70 hover:text-accent hover:bg-accent/10 transition-all duration-200 text-sm',
-                  location.pathname === child.href && 'text-accent bg-accent/10',
-                  index === 0 && 'text-accent font-medium'
+                  'block px-4 py-2.5 rounded-lg text-sm transition-colors',
+                  location.pathname === child.href
+                    ? 'text-accent bg-accent/10'
+                    : 'text-white/70 hover:text-white hover:bg-white/5'
                 )}
               >
                 {child.label}
               </Link>
             ))}
-          </motion.div>
+          </div>
         </div>
       )}
     </div>
@@ -233,65 +229,66 @@ function NavItem({ item, openDropdown, setOpenDropdown, location }: NavItemProps
 }
 
 // Mobile Nav Item Component
-function MobileNavItem({ item, openDropdown, setOpenDropdown, location }: NavItemProps) {
+interface MobileNavItemProps extends NavItemProps {
+  closeMenu: () => void
+}
+
+function MobileNavItem({ item, openDropdown, setOpenDropdown, location, closeMenu }: MobileNavItemProps) {
   const isActive = item.children
     ? location.pathname.startsWith(item.href)
     : location.pathname === item.href
 
-  return (
-    <div>
-      {item.children ? (
-        <div>
-          <button
-            className={cn(
-              'flex items-center justify-between w-full px-4 py-3 rounded-xl text-white/70 hover:text-white hover:bg-white/5 transition-all',
-              isActive && 'text-accent'
-            )}
-            onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
-          >
-            {item.label}
-            <ChevronDown
-              className={cn(
-                'w-4 h-4 transition-transform duration-300',
-                openDropdown === item.label && 'rotate-180'
-              )}
-            />
-          </button>
-          <AnimatePresence>
-            {openDropdown === item.label && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="pl-4 overflow-hidden"
-              >
-                {item.children.map((child) => (
-                  <Link
-                    key={child.label}
-                    to={child.href}
-                    className={cn(
-                      'block px-4 py-2.5 text-white/60 hover:text-accent transition-colors',
-                      location.pathname === child.href && 'text-accent'
-                    )}
-                  >
-                    {child.label}
-                  </Link>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      ) : (
-        <Link
-          to={item.href}
+  if (item.children) {
+    return (
+      <div>
+        <button
           className={cn(
-            'block px-4 py-3 rounded-xl text-white/70 hover:text-white hover:bg-white/5 transition-all',
-            isActive && 'text-accent'
+            'flex items-center justify-between w-full px-4 py-4 text-lg font-medium rounded-xl transition-colors',
+            isActive ? 'text-accent' : 'text-white'
           )}
+          onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
         >
           {item.label}
-        </Link>
+          <ChevronDown
+            className={cn(
+              'w-5 h-5 transition-transform duration-200',
+              openDropdown === item.label && 'rotate-180'
+            )}
+          />
+        </button>
+        {openDropdown === item.label && (
+          <div className="ml-4 mt-1 space-y-1 border-l-2 border-white/10 pl-4">
+            {item.children.map((child) => (
+              <Link
+                key={child.label}
+                to={child.href}
+                onClick={closeMenu}
+                className={cn(
+                  'block py-3 text-base transition-colors',
+                  location.pathname === child.href
+                    ? 'text-accent'
+                    : 'text-white/60 hover:text-white'
+                )}
+              >
+                {child.label}
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  return (
+    <Link
+      to={item.href}
+      onClick={closeMenu}
+      className={cn(
+        'block px-4 py-4 text-lg font-medium rounded-xl transition-colors',
+        isActive ? 'text-accent bg-accent/5' : 'text-white'
       )}
-    </div>
+    >
+      {item.label}
+    </Link>
   )
 }

@@ -3,12 +3,13 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { motion } from 'framer-motion'
-import { Mail, Phone, MapPin, MessageCircle, Send, CheckCircle, User, Sparkles } from 'lucide-react'
+import { Mail, Phone, MapPin, MessageCircle, Send, CheckCircle, User, Sparkles, AlertCircle } from 'lucide-react'
 import { Container, Button, Input, Textarea, Select } from '@/components/ui'
 import { SEO, AnimatedSection } from '@/components/shared'
 import { siteConfig } from '@/data/siteConfig'
 import { services } from '@/data/services'
 import { formatWhatsAppLink, formatPhoneLink } from '@/lib/utils'
+import { sendContactEmail } from '@/lib/emailjs'
 
 const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -64,6 +65,7 @@ const contactMethods = [
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   const {
     register,
@@ -76,13 +78,22 @@ export default function Contact() {
 
   const onSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true)
-    // Simulate form submission
-    // In production, integrate with EmailJS or other service
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    console.log('Form data:', data)
-    setIsSubmitting(false)
-    setIsSubmitted(true)
-    reset()
+    setSubmitError(null)
+
+    try {
+      const result = await sendContactEmail(data)
+
+      if (result.success) {
+        setIsSubmitted(true)
+        reset()
+      } else {
+        setSubmitError(result.error || 'Failed to send message. Please try again.')
+      }
+    } catch {
+      setSubmitError('An unexpected error occurred. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const getColorClasses = (color: string) => {
@@ -127,12 +138,12 @@ export default function Contact() {
         {/* Background elements */}
         <div className="absolute inset-0">
           <motion.div
-            className="absolute top-20 right-20 w-96 h-96 rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-600/10 blur-3xl"
+            className="absolute top-20 right-20 w-96 h-96 rounded-full bg-accent/20 blur-3xl"
             animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
             transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
           />
           <motion.div
-            className="absolute bottom-0 left-20 w-80 h-80 rounded-full bg-gradient-to-r from-purple-600/20 to-pink-500/10 blur-3xl"
+            className="absolute bottom-0 left-20 w-80 h-80 rounded-full bg-accent/10 blur-3xl"
             animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.4, 0.2] }}
             transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
           />
@@ -140,13 +151,13 @@ export default function Contact() {
 
         <Container className="relative">
           <AnimatedSection className="text-center max-w-3xl mx-auto">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-sm font-medium mb-6">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-medium mb-6">
               <Sparkles className="w-4 h-4" />
               Get In Touch
             </span>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
               Let's Build Something{' '}
-              <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">
+              <span className="text-accent">
                 Amazing Together
               </span>
             </h1>
@@ -166,8 +177,8 @@ export default function Contact() {
             <AnimatedSection direction="left" className="lg:col-span-3">
               <div className="relative p-8 md:p-10 rounded-3xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 backdrop-blur-xl overflow-hidden">
                 {/* Decorative gradient */}
-                <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-cyan-500/30 to-transparent rounded-full blur-2xl" />
-                <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-gradient-to-br from-purple-500/30 to-transparent rounded-full blur-2xl" />
+                <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-accent/30 to-transparent rounded-full blur-2xl" />
+                <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-gradient-to-br from-accent/20 to-transparent rounded-full blur-2xl" />
 
                 {isSubmitted ? (
                   <motion.div
@@ -191,8 +202,8 @@ export default function Contact() {
                 ) : (
                   <div className="relative">
                     <div className="flex items-center gap-3 mb-8">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
-                        <Send className="w-6 h-6 text-white" />
+                      <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center">
+                        <Send className="w-6 h-6 text-black" />
                       </div>
                       <div>
                         <h2 className="text-2xl font-bold text-white">
@@ -244,6 +255,17 @@ export default function Contact() {
                         error={errors.message?.message}
                         {...register('message')}
                       />
+
+                      {submitError && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="flex items-center gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400"
+                        >
+                          <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                          <p className="text-sm">{submitError}</p>
+                        </motion.div>
+                      )}
 
                       <Button
                         type="submit"
@@ -337,8 +359,8 @@ export default function Contact() {
               <div className="aspect-[21/9] bg-gradient-to-br from-white/5 to-white/10 flex items-center justify-center relative">
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
                 <div className="text-center relative">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center mx-auto mb-4">
-                    <MapPin className="w-8 h-8 text-cyan-400" />
+                  <div className="w-16 h-16 rounded-full bg-accent/20 border border-white/10 flex items-center justify-center mx-auto mb-4">
+                    <MapPin className="w-8 h-8 text-accent" />
                   </div>
                   <p className="text-white/60">Interactive map coming soon</p>
                   <p className="text-white/40 text-sm mt-1">{siteConfig.contact.address}</p>

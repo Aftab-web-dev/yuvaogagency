@@ -16,12 +16,12 @@ export default {
           light: '#FFFFFF',
           muted: '#F5F5F5',
         },
-        // Accent - Orange-Red (user selected)
+        // Accent - Yellow (user selected)
         accent: {
-          DEFAULT: '#FF5722',
-          hover: '#FF7043',
-          light: '#FFCCBC',
-          dark: '#E64A19',
+          DEFAULT: '#faff01',
+          hover: '#e0e500',
+          light: '#fdffa1',
+          dark: '#c9ce00',
         },
         // Text colors
         foreground: {
@@ -37,17 +37,17 @@ export default {
         },
         // Legacy colors (for compatibility)
         primary: {
-          50: '#FFF3E0',
-          100: '#FFE0B2',
-          200: '#FFCC80',
-          300: '#FFB74D',
-          400: '#FFA726',
-          500: '#FF5722',
-          600: '#F4511E',
-          700: '#E64A19',
-          800: '#D84315',
-          900: '#BF360C',
-          950: '#8D2B0E',
+          50: '#feffd9',
+          100: '#fdffa1',
+          200: '#fcff69',
+          300: '#faff01',
+          400: '#e0e500',
+          500: '#faff01',
+          600: '#c9ce00',
+          700: '#a3a700',
+          800: '#7d8000',
+          900: '#575900',
+          950: '#313200',
         },
         navy: {
           50: '#f0f4ff',
@@ -85,7 +85,7 @@ export default {
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         'hero-dark': 'linear-gradient(135deg, #0D0D0D 0%, #1a1a1a 50%, #0D0D0D 100%)',
         'hero-light': 'linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 50%, #FFFFFF 100%)',
-        'accent-gradient': 'linear-gradient(135deg, #FF5722 0%, #FF7043 100%)',
+        'accent-gradient': 'linear-gradient(135deg, #faff01 0%, #e0e500 100%)',
         'card-dark': 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%)',
         'card-light': 'linear-gradient(135deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.05) 100%)',
       },
@@ -123,8 +123,8 @@ export default {
           '50%': { transform: 'translateY(-20px)' },
         },
         glow: {
-          '0%': { boxShadow: '0 0 20px rgba(255, 87, 34, 0.3)' },
-          '100%': { boxShadow: '0 0 40px rgba(255, 87, 34, 0.6)' },
+          '0%': { boxShadow: '0 0 20px rgba(250, 255, 1, 0.3)' },
+          '100%': { boxShadow: '0 0 40px rgba(250, 255, 1, 0.6)' },
         },
         gradient: {
           '0%, 100%': { backgroundPosition: '0% 50%' },
@@ -136,9 +136,9 @@ export default {
         },
       },
       boxShadow: {
-        'glow': '0 0 40px -10px rgba(255, 87, 34, 0.5)',
-        'glow-lg': '0 0 60px -15px rgba(255, 87, 34, 0.6)',
-        'glow-accent': '0 0 40px -10px rgba(255, 87, 34, 0.5)',
+        'glow': '0 0 40px -10px rgba(250, 255, 1, 0.5)',
+        'glow-lg': '0 0 60px -15px rgba(250, 255, 1, 0.6)',
+        'glow-accent': '0 0 40px -10px rgba(250, 255, 1, 0.5)',
         'card': '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
         'card-hover': '0 35px 60px -12px rgba(0, 0, 0, 0.6)',
       },

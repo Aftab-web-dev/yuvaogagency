@@ -136,7 +136,7 @@ export default function ServiceDetail() {
                       >
                         <div className="absolute inset-0 bg-accent blur-2xl opacity-30" />
                         <div className="relative w-32 h-32 rounded-2xl bg-accent flex items-center justify-center shadow-2xl">
-                          <Icon className="w-16 h-16 text-white" />
+                          <Icon className="w-16 h-16 text-black" />
                         </div>
                       </motion.div>
 

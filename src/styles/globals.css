@@ -2,27 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CSS Custom Properties for theme switching */
+/* CSS Custom Properties - Dark Theme Only */
 :root {
   --background: #0D0D0D;
   --background-secondary: #1a1a1a;
   --foreground: #FFFFFF;
   --foreground-muted: rgba(255, 255, 255, 0.6);
-  --accent: #FF5722;
-  --accent-hover: #FF7043;
+  --accent: #faff01;
+  --accent-hover: #e0e500;
   --border: rgba(255, 255, 255, 0.1);
   --card-bg: rgba(255, 255, 255, 0.05);
-}
-
-.light {
-  --background: #FFFFFF;
-  --background-secondary: #F5F5F5;
-  --foreground: #0D0D0D;
-  --foreground-muted: rgba(0, 0, 0, 0.6);
-  --accent: #FF5722;
-  --accent-hover: #E64A19;
-  --border: rgba(0, 0, 0, 0.1);
-  --card-bg: rgba(0, 0, 0, 0.02);
 }
 
 @layer base {
@@ -31,24 +20,11 @@
   }
 
   body {
-    @apply antialiased transition-colors duration-300;
+    @apply antialiased;
     font-family: 'Montserrat', system-ui, sans-serif;
-    background-color: var(--background);
-    color: var(--foreground);
-    min-height: 100vh;
-  }
-
-  /* Dark mode body */
-  .dark body,
-  :root:not(.light) body {
     background-color: #0D0D0D;
     color: #FFFFFF;
-  }
-
-  /* Light mode body */
-  .light body {
-    background-color: #FFFFFF;
-    color: #0D0D0D;
+    min-height: 100vh;
   }
 
   /* Custom scrollbar - Dark mode */
@@ -72,7 +48,7 @@
 
   /* Selection color */
   ::selection {
-    background: rgba(255, 87, 34, 0.3);
+    background: rgba(250, 255, 1, 0.3);
     color: inherit;
   }
 
@@ -103,7 +79,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(0 0 30px rgba(255, 87, 34, 0.4));
+    filter: drop-shadow(0 0 30px rgba(250, 255, 1, 0.4));
   }
 
   /* Gradient backgrounds */
@@ -112,7 +88,7 @@
   }
 
   .gradient-bg-animated {
-    background: linear-gradient(-45deg, #FF5722, #FF7043, #E64A19, #FF5722);
+    background: linear-gradient(-45deg, #faff01, #e0e500, #c9ce00, #faff01);
     background-size: 400% 400%;
     animation: gradient 8s ease infinite;
   }
@@ -146,16 +122,16 @@
   }
 
   .glass-card-hover:hover {
-    border-color: rgba(255, 87, 34, 0.5);
-    box-shadow: 0 8px 32px rgba(255, 87, 34, 0.1);
+    border-color: rgba(250, 255, 1, 0.5);
+    box-shadow: 0 8px 32px rgba(250, 255, 1, 0.1);
     transform: translateY(-5px);
   }
 
   /* Accent glow effect */
   .accent-glow {
-    box-shadow: 0 0 20px rgba(255, 87, 34, 0.3),
-                0 0 40px rgba(255, 87, 34, 0.2),
-                0 0 60px rgba(255, 87, 34, 0.1);
+    box-shadow: 0 0 20px rgba(250, 255, 1, 0.3),
+                0 0 40px rgba(250, 255, 1, 0.2),
+                0 0 60px rgba(250, 255, 1, 0.1);
   }
 
   /* Neon border effect */
@@ -167,7 +143,7 @@
     content: '';
     position: absolute;
     inset: -2px;
-    background: linear-gradient(135deg, #FF5722, #FF7043, #E64A19, #FF5722);
+    background: linear-gradient(135deg, #faff01, #e0e500, #c9ce00, #faff01);
     background-size: 400% 400%;
     border-radius: inherit;
     z-index: -1;
@@ -186,14 +162,14 @@
   }
 
   .btn-primary {
-    @apply btn text-white;
+    @apply btn text-black;
     background: var(--accent);
-    box-shadow: 0 4px 20px rgba(255, 87, 34, 0.4);
+    box-shadow: 0 4px 20px rgba(250, 255, 1, 0.4);
   }
 
   .btn-primary:hover {
     background: var(--accent-hover);
-    box-shadow: 0 6px 30px rgba(255, 87, 34, 0.6);
+    box-shadow: 0 6px 30px rgba(250, 255, 1, 0.6);
     transform: translateY(-2px);
   }
 
@@ -206,7 +182,7 @@
 
   .btn-secondary:hover {
     border-color: var(--accent);
-    box-shadow: 0 0 20px rgba(255, 87, 34, 0.2);
+    box-shadow: 0 0 20px rgba(250, 255, 1, 0.2);
   }
 
   .btn-outline {
@@ -217,8 +193,8 @@
 
   .btn-outline:hover {
     background: var(--accent);
-    color: white;
-    box-shadow: 0 0 30px rgba(255, 87, 34, 0.4);
+    color: black;
+    box-shadow: 0 0 30px rgba(250, 255, 1, 0.4);
   }
 
   /* Section padding */
@@ -264,7 +240,7 @@
 
   .service-card:hover {
     transform: translateY(-10px);
-    border-color: rgba(255, 87, 34, 0.3);
+    border-color: rgba(250, 255, 1, 0.3);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
   }
 
@@ -370,20 +346,20 @@
 
   /* Text shadow glow */
   .text-glow {
-    text-shadow: 0 0 40px rgba(255, 87, 34, 0.5);
+    text-shadow: 0 0 40px rgba(250, 255, 1, 0.5);
   }
 
   /* Background accent opacity utilities */
   .bg-accent\/10 {
-    background-color: rgba(255, 87, 34, 0.1);
+    background-color: rgba(250, 255, 1, 0.1);
   }
 
   .bg-accent\/20 {
-    background-color: rgba(255, 87, 34, 0.2);
+    background-color: rgba(250, 255, 1, 0.2);
   }
 
   .border-accent\/30 {
-    border-color: rgba(255, 87, 34, 0.3);
+    border-color: rgba(250, 255, 1, 0.3);
   }
 }
 
@@ -399,8 +375,8 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(255, 87, 34, 0.4); }
-  50% { box-shadow: 0 0 40px rgba(255, 87, 34, 0.8); }
+  0%, 100% { box-shadow: 0 0 20px rgba(250, 255, 1, 0.4); }
+  50% { box-shadow: 0 0 40px rgba(250, 255, 1, 0.8); }
 }
 
 @keyframes shimmer {

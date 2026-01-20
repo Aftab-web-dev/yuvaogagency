@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
-import { Calendar, Clock, User } from 'lucide-react'
-import { Container, Button, Card, Badge } from '@/components/ui'
+import { motion } from 'framer-motion'
+import { Calendar, Clock, User, BookOpen, ArrowRight } from 'lucide-react'
+import { Container, Button, Badge } from '@/components/ui'
 import { SEO, AnimatedSection } from '@/components/shared'
 import { blogPosts } from '@/data/blog'
 import { formatDate } from '@/lib/utils'
@@ -17,14 +18,36 @@ export default function Blog() {
       />
 
       {/* Hero Section */}
-      <section className="section-padding bg-gradient-to-b from-dark-900 to-dark-950">
-        <Container>
+      <section className="relative pt-32 pb-20 overflow-hidden">
+        {/* Background elements */}
+        <div className="absolute inset-0">
+          <motion.div
+            className="absolute top-20 right-20 w-96 h-96 rounded-full bg-accent/20 blur-3xl"
+            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <motion.div
+            className="absolute bottom-0 left-20 w-80 h-80 rounded-full bg-accent/10 blur-3xl"
+            animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.4, 0.2] }}
+            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </div>
+
+        <Container className="relative">
           <AnimatedSection className="text-center max-w-4xl mx-auto">
-            <span className="text-primary-400 font-medium mb-4 block">Our Blog</span>
-            <h1 className="heading-xl mb-6">
-              Insights & <span className="gradient-text">Updates</span>
+            <motion.span
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-medium mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <BookOpen className="w-4 h-4" />
+              Our Blog
+            </motion.span>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
+              Insights & <span className="text-accent">Updates</span>
             </h1>
-            <p className="text-xl text-dark-300">
+            <p className="text-xl text-white/60">
               Stay updated with the latest trends, tips, and insights from our
               team of experts.
             </p>
@@ -33,25 +56,28 @@ export default function Blog() {
       </section>
 
       {/* Featured Post */}
-      <section className="section-padding">
+      <section className="py-12">
         <Container>
           <AnimatedSection>
             <Link to={`/blog/${featuredPost.slug}`}>
-              <Card hover className="grid md:grid-cols-2 gap-8 p-0 overflow-hidden">
-                <div className="aspect-video md:aspect-auto bg-dark-700 flex items-center justify-center">
-                  <span className="text-8xl font-bold text-dark-600">
+              <motion.div
+                className="grid md:grid-cols-2 gap-8 rounded-3xl bg-white/5 border border-white/10 overflow-hidden hover:border-accent/30 transition-all duration-300 group"
+                whileHover={{ y: -5 }}
+              >
+                <div className="aspect-video md:aspect-auto bg-[#1a1a1a] flex items-center justify-center">
+                  <span className="text-8xl font-bold text-white/10 group-hover:text-accent/20 transition-colors">
                     {featuredPost.title.charAt(0)}
                   </span>
                 </div>
                 <div className="p-8 flex flex-col justify-center">
-                  <Badge variant="primary" className="w-fit mb-4">
+                  <Badge className="w-fit mb-4 bg-accent/10 text-accent border-accent/20">
                     Featured
                   </Badge>
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-accent transition-colors">
                     {featuredPost.title}
                   </h2>
-                  <p className="text-dark-400 mb-6">{featuredPost.excerpt}</p>
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-dark-400">
+                  <p className="text-white/60 mb-6">{featuredPost.excerpt}</p>
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-white/50">
                     <div className="flex items-center gap-2">
                       <User className="w-4 h-4" />
                       {featuredPost.author}
@@ -66,61 +92,73 @@ export default function Blog() {
                     </div>
                   </div>
                 </div>
-              </Card>
+              </motion.div>
             </Link>
           </AnimatedSection>
         </Container>
       </section>
 
       {/* Other Posts */}
-      <section className="section-padding pt-0">
+      <section className="py-12">
         <Container>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {otherPosts.map((post, index) => (
-              <AnimatedSection key={post.id} delay={index * 0.1}>
+              <motion.div
+                key={post.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+              >
                 <Link to={`/blog/${post.slug}`}>
-                  <Card hover className="h-full p-0 overflow-hidden group">
-                    <div className="aspect-video bg-dark-700 flex items-center justify-center">
-                      <span className="text-6xl font-bold text-dark-600 group-hover:text-dark-500 transition-colors">
+                  <motion.div
+                    className="h-full rounded-2xl bg-white/5 border border-white/10 overflow-hidden hover:border-accent/30 transition-all duration-300 group"
+                    whileHover={{ y: -5 }}
+                  >
+                    <div className="aspect-video bg-[#1a1a1a] flex items-center justify-center">
+                      <span className="text-6xl font-bold text-white/10 group-hover:text-accent/20 transition-colors">
                         {post.title.charAt(0)}
                       </span>
                     </div>
                     <div className="p-6">
-                      <Badge size="sm" className="mb-3">
+                      <Badge className="mb-3 bg-white/5 text-white/60 border-white/10">
                         {post.category}
                       </Badge>
-                      <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-primary-400 transition-colors">
+                      <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-accent transition-colors">
                         {post.title}
                       </h3>
-                      <p className="text-dark-400 text-sm mb-4">{post.excerpt}</p>
-                      <div className="flex items-center justify-between text-sm text-dark-400">
+                      <p className="text-white/60 text-sm mb-4 line-clamp-2">{post.excerpt}</p>
+                      <div className="flex items-center justify-between text-sm text-white/50">
                         <span>{formatDate(post.date)}</span>
                         <span>{post.readTime}</span>
                       </div>
                     </div>
-                  </Card>
+                  </motion.div>
                 </Link>
-              </AnimatedSection>
+              </motion.div>
             ))}
           </div>
         </Container>
       </section>
 
       {/* Newsletter CTA */}
-      <section className="section-padding bg-dark-900/50">
+      <section className="py-20 bg-white/[0.02]">
         <Container>
           <AnimatedSection className="text-center max-w-3xl mx-auto">
-            <h2 className="heading-lg mb-4">Subscribe to Our Newsletter</h2>
-            <p className="text-dark-400 text-lg mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Subscribe to Our Newsletter</h2>
+            <p className="text-white/60 text-lg mb-8">
               Get the latest articles and insights delivered straight to your inbox.
             </p>
             <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-lg bg-dark-800 border border-dark-700 text-white placeholder-dark-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="flex-1 px-5 py-3 rounded-full bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
               />
-              <Button type="submit">Subscribe</Button>
+              <Button type="submit" className="group">
+                Subscribe
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
             </form>
           </AnimatedSection>
         </Container>

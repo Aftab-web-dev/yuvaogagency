@@ -1,0 +1,26 @@
+# robots.txt for Yuvaog Digital Agency
+# https://yuvaog.com
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://yuvaog.com/sitemap.xml
+
+# Disallow admin or sensitive paths
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+
+# Allow search engine crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
